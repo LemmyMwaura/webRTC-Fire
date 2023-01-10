@@ -1,6 +1,6 @@
 # RTC-FIRE
 
-A minimal WebRTC connection with Firebase as the signalling server.
+A simple video chat app with Firebase as the signalling server.
 
 ___
 ## Built with
