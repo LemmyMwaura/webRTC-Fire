@@ -8,20 +8,21 @@ import {
   addDoc,
   onSnapshot,
   updateDoc,
+  QuerySnapshot,
 } from 'firebase/firestore'
 
 let pc = new RTCPeerConnection(servers)
-let localStream = null
-let remoteStream = null
+let localStream: MediaStream | null = null
+let remoteStream: MediaStream | null = null
 
 // Dom Elements
-const callBtn = document.getElementById('callBtn')
-const callInput = document.getElementById('callInput')
-const answerBtn = document.getElementById('answerBtn')
-const hangupBtn = document.getElementById('hangupBtn')
-const webcamBtn = document.getElementById('webcamBtn')
-const webcamVideo = document.getElementById('webcamVideo')
-const remoteVideo = document.getElementById('remoteVideo')
+const callBtn = document.getElementById('callBtn') as HTMLButtonElement
+const callInput = document.getElementById('callInput') as HTMLInputElement
+const answerBtn = document.getElementById('answerBtn') as HTMLButtonElement
+// const hangupBtn = document.getElementById('hangupBtn') as HTMLButtonElement
+const webcamBtn = document.getElementById('webcamBtn') as HTMLButtonElement
+const webcamVideo = document.getElementById('webcamVideo') as HTMLVideoElement
+const remoteVideo = document.getElementById('remoteVideo') as HTMLVideoElement
 
 //1. Setup PeerConnection
 webcamBtn.onclick = async () => {
@@ -30,19 +31,21 @@ webcamBtn.onclick = async () => {
       video: true,
       audio: true,
     })
-  } catch (err) {
+  } catch (err: any) {
     console.log(err.message)
   }
   remoteStream = new MediaStream()
 
   // push tracks from localeStream to peer connection
-  localStream.getTracks().forEach((track) => {
+  localStream!.getTracks().forEach((track) => {
+    if (!localStream) return
     pc.addTrack(track, localStream)
   })
 
   // pull tracks from remote stream, add to video stream
   pc.ontrack = (event) => {
     event.streams[0].getTracks().forEach((track) => {
+      if (!remoteStream) return
       remoteStream.addTrack(track)
     })
   }
@@ -57,8 +60,9 @@ callBtn.onclick = async () => {
   const offerCandidatesRef = collection(callDocRef, 'offerCandidates')
   const answerCandidatesRef = collection(callDocRef, 'answerCandidates')
 
-  callInput.value = callDocRef.id
-
+  if (callInput) {
+    callInput.value = callDocRef.id
+  }
   // get candidate for caller, set to Dp
   pc.onicecandidate = (event) => {
     event.candidate && addDoc(offerCandidatesRef, event.candidate.toJSON())
@@ -107,7 +111,10 @@ answerBtn.onclick = async () => {
   }
 
   const callData = (await getDoc(callDocRef)).data()
+
+  if (!callData) return
   const offerDesc = callData.offer
+
   await pc.setRemoteDescription(new RTCSessionDescription(offerDesc))
 
   const answDesc = await pc.createAnswer()
@@ -120,8 +127,8 @@ answerBtn.onclick = async () => {
 
   await updateDoc(callDocRef, { answer })
 
-  onSnapshot(offerDesc, (snapshot) => {
-    snapshot.docChanges().forEach((change) => {
+  onSnapshot(offerDesc, (snapshot: QuerySnapshot<any>) => {
+    snapshot.docChanges().forEach((change: any) => {
       if (change.type === 'added') {
         let data = change.doc.data()
         pc.addIceCandidate(new RTCIceCandidate(data))
