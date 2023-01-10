@@ -17,8 +17,8 @@ ___
 
 First clone the repository from Github and switch to the new directory:
 
-    $ git clone git@github.com:LemmyMwaura/WebRTC.git
-    $ cd WebRTC
+    $ git clone git@github.com:LemmyMwaura/RTC-Fire.git
+    $ cd RTC-Fire
     
 Install project dependencies:
 
