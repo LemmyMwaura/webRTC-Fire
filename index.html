@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>WebRTC Playground</title>
+  <link rel="stylesheet" href="./App/css/style.css">
+  <script defer type="module" src="./App/script/script.js"></script>
+</head>
+
+<body>
+  <h2 class="p-2 text-2xl text-center bg-slate-700 text-slate-100 w-auto">
+    Start Your Webcam
+  </h2>
+  <div class="flex justify-center gap-4 p-5 mt-2">
+    <span>
+      <h3 class="text-2xl text-bold text-center text-gray-900">Local</h3>
+      <video id="webcamVideo" class="border-slate-900 border-4 rounded mt-2 w-80" autoplay playisinline></video>
+    </span>
+    <span>
+      <h3 class="text-2xl text-bold text-center text-gray-900">Remote</h3>
+      <video id="remoteVideo" class="border-slate-900 border-4 rounded mt-2 w-80" autoplay playisinline></video>
+    </span>
+  </div>
+
+  <div class="flex flex-col gap-2 justify-center items-center">
+    <button id="webcamBtn" class="bg-slate-800 p-2 hover:bg-slate-600 text-slate-100 rounded-sm">Start
+      Webcam</button>
+    <h2 class="mt-4">Create New Call</h2>
+    <button id="callBtn" class="bg-slate-800 p-2 hover:bg-slate-600 text-slate-100 rounded-sm">Call</button>
+    <h2 class="mt-4">Join Call</h2>
+    <div>
+      <input id="callInput" class="border-2 border-slate-800 rounded-sm p-2 outline-none">
+      <button id="answerBtn" class="bg-slate-800 p-2 hover:bg-slate-600 text-slate-100 rounded-sm">Answer</button>
+    </div>
+    <button id="hangupBtn" class="bg-red-700 p-2 hover:bg-red-500 text-slate-100 rounded-sm mt-4">HangUp</button>
+  </div>
+</body>
+</html>
